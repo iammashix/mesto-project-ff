@@ -1,7 +1,11 @@
 
+// объявление констант 
+const cardTemplate = document.querySelector('#card-template').content;
+const cardList = document.querySelector('.places__list');
+
 // Функция создания карточки
 function createCard(cardData, deleteCallback) {
-    const cardTemplate = document.querySelector('#card-template').content;
+
     const cardElement = cardTemplate.cloneNode(true);
 
     cardElement.querySelector('.card__title').textContent = cardData.name;
@@ -20,12 +24,12 @@ function deleteCard(event) {
 
 // Вывод карточки на страницу
 
-function outCards(cards) {
-    const cardList = document.querySelector('.places__list');
+function showCards(cards) {
     cards.forEach((cardData) => {
         const cardElement = createCard(cardData, deleteCard);
         cardList.append(cardElement);
     });
 }
 
-outCards(initialCards);
+showCards(initialCards);
+

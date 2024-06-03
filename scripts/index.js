@@ -7,10 +7,11 @@ const cardList = document.querySelector('.places__list');
 function createCard(cardData, deleteCallback) {
 
     const cardElement = cardTemplate.cloneNode(true);
+    const cardImage = cardElement.querySelector('.card__image'); 
 
     cardElement.querySelector('.card__title').textContent = cardData.name;
-    cardElement.querySelector('.card__image').src = cardData.link;
-    cardElement.querySelector('.card__image').alt = cardData.name;
+    cardImage.src = cardData.link; 
+    cardImage.alt = cardData.name;
 
     cardElement.querySelector('.card__delete-button').addEventListener('click', deleteCallback);
 

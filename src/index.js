@@ -2,7 +2,7 @@ import './pages/index.css';
 import initialCards from './cards.js';
 import avatar from './images/avatar.jpg';
 import { createCard, deleteCard, likeCard } from './components/card.js';
-import { openPopup, closePopup } from './components/modal.js';
+import { openPopup, closePopup, addOverlayCloseHandler } from './components/modal.js';
 
 const cardTemplate = document.querySelector('#card-template').content;
 const cardList = document.querySelector('.places__list');
@@ -23,25 +23,17 @@ const profileDescription = document.querySelector('.profile__description');
 document.querySelector('.profile__image').style.backgroundImage = `url(${avatar})`;
 
 // открытие попапа с изображением
- export function openImagePopup(imageSrc, imageAlt) {
+export function openImagePopup(imageSrc, imageAlt) {
     imagePopupImage.src = imageSrc;
     imagePopupImage.alt = imageAlt;
     imagePopupCaption.textContent = imageAlt;
     openPopup(imagePopup);
 }
 
-// закрытие вне области
-document.addEventListener('click', (event) => {
-    const target = event.target;
-    if (target.classList.contains('popup')) {
-        closePopup(target);
-    }
-});
-
 // вывод карточек 
 function showCards(cards) {
     cards.forEach((cardData) => {
-        const cardElement = createCard(cardTemplate, cardData, deleteCard, likeCard);
+        const cardElement = createCard(cardTemplate, cardData, deleteCard, likeCard, openImagePopup);
         cardList.append(cardElement);
     });
 }
@@ -49,9 +41,9 @@ function showCards(cards) {
 showCards(initialCards);
 
 // форма DOM
-const formElement = document.querySelector('.popup__form[name="edit-profile"]');
-const nameInput = formElement.querySelector('.popup__input_type_name');
-const jobInput = formElement.querySelector('.popup__input_type_description');
+const editProfileForm = document.querySelector('.popup__form[name="edit-profile"]'); 
+const nameInput = editProfileForm.querySelector('.popup__input_type_name'); 
+const jobInput = editProfileForm.querySelector('.popup__input_type_description');
 
 // обработчик формы
 function handleFormSubmit(evt) {
@@ -67,7 +59,7 @@ function handleFormSubmit(evt) {
 }
 
 // submit формы
-formElement.addEventListener('submit', handleFormSubmit);
+editProfileForm.addEventListener('submit', handleFormSubmit);
 
 // новая карточка
 const newCardForm = document.querySelector('.popup__form[name="new-place"]');
@@ -80,7 +72,7 @@ function handleNewCardFormSubmit(evt) {
     const cardName = cardNameInput.value;
     const cardLink = cardLinkInput.value;
 
-    const newCard = createCard(cardTemplate, { name: cardName, link: cardLink }, deleteCard, likeCard);
+    const newCard = createCard(cardTemplate, { name: cardName, link: cardLink }, deleteCard, likeCard, openImagePopup);
     cardList.prepend(newCard);
 
     newCardForm.reset();
@@ -90,7 +82,7 @@ function handleNewCardFormSubmit(evt) {
 // обработчик submit новой карточки
 newCardForm.addEventListener('submit', handleNewCardFormSubmit);
 
-//  обработчики событий для открытия попапов
+// обработчики событий для открытия попапов
 editProfileButton.addEventListener('click', () => {
     openPopup(editProfilePopup);
     nameInput.value = profileTitle.textContent; 
@@ -101,4 +93,5 @@ addCardButton.addEventListener('click', () => openPopup(newCardPopup));
 closeButtons.forEach((button) => {
     const popup = button.closest('.popup');
     button.addEventListener('click', () => closePopup(popup));
+    addOverlayCloseHandler(popup); // Добавляем обработчик клика на оверлей для каждого попапа
 });

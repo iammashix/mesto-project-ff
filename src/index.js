@@ -46,7 +46,7 @@ const nameInput = editProfileForm.querySelector('.popup__input_type_name');
 const jobInput = editProfileForm.querySelector('.popup__input_type_description');
 
 // обработчик формы
-function handleFormSubmit(evt) {
+function handleEditProfileFormSubmit(evt) {
     evt.preventDefault(); 
   
     const newName = nameInput.value;
@@ -59,7 +59,7 @@ function handleFormSubmit(evt) {
 }
 
 // submit формы
-editProfileForm.addEventListener('submit', handleFormSubmit);
+editProfileForm.addEventListener('submit', handleEditProfileFormSubmit);
 
 // новая карточка
 const newCardForm = document.querySelector('.popup__form[name="new-place"]');
